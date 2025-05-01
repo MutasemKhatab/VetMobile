@@ -74,7 +74,7 @@ class _LoginBoxState extends State<LoginBox> {
       margin: const EdgeInsets.symmetric(horizontal: 30),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Form(

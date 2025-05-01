@@ -6,6 +6,7 @@ import 'package:vet/providers/service_request_provider.dart';
 import 'package:vet/providers/vet_owner_provider.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/custom_input_field.dart';
+import 'package:vet/widgets/future_button.dart';
 
 class CreateServiceRequestScreen extends StatefulWidget {
   const CreateServiceRequestScreen({super.key});
@@ -259,18 +260,9 @@ class _CreateServiceRequestScreenState
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Provider.of<ServiceRequestProvider>(context).isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Submit Request'),
+                child: FutureButton(
+                  onTap: _submitForm,
+                  title: 'Submit Request',
                 ),
               ),
             ],

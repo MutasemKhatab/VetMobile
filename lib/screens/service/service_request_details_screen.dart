@@ -4,6 +4,7 @@ import 'package:vet/models/service_request.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vet/providers/service_request_provider.dart';
+import 'package:vet/widgets/future_button.dart';
 
 class ServiceRequestDetailsScreen extends StatelessWidget {
   final ServiceRequest serviceRequest;
@@ -158,18 +159,9 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
             if (canCancel)
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () => _showCancelConfirmation(context),
-                  icon: const Icon(Icons.cancel),
-                  label: const Text('Cancel Request'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    foregroundColor: Theme.of(context).colorScheme.onError,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                child: FutureButton(
+                  onTap: () => _cancelServiceRequest(context),
+                  title: 'Cancel Request',
                 ),
               ),
           ])),
@@ -177,8 +169,8 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
   }
 
   // Show confirmation dialog before cancelling
-  void _showCancelConfirmation(BuildContext context) {
-    showDialog(
+  Future<bool> _showCancelConfirmation(BuildContext context) async {
+    final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Cancel Service Request'),
@@ -187,14 +179,13 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(ctx).pop();
+              Navigator.of(ctx).pop(false);
             },
             child: const Text('No'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(ctx).pop();
-              _cancelServiceRequest(context);
+              Navigator.of(ctx).pop(true);
             },
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
@@ -204,10 +195,14 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
         ],
       ),
     );
+    return result ?? false;
   }
 
   // Cancel the service request
   Future<void> _cancelServiceRequest(BuildContext context) async {
+    final confirm = await _showCancelConfirmation(context);
+    if (!confirm) return;
+
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 

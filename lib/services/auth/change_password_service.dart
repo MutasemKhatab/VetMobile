@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 abstract class ChangePasswordService {
-  Future<bool> changePassword(ChangePasswordRequest request);
+  Future<ChangePasswordResponse> changePassword(ChangePasswordRequest request);
 }
 
 class ChangePasswordRequest {

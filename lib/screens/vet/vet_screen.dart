@@ -8,6 +8,7 @@ import 'package:vet/providers/vaccine_provider.dart';
 import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/services/permissions_service.dart';
+import 'package:vet/widgets/future_button.dart';
 
 class VetScreen extends StatelessWidget {
   final Vet vet;
@@ -392,20 +393,67 @@ class VetScreen extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: ElevatedButton.icon(
-              onPressed: () => _showDeleteConfirmation(context),
-              icon: const Icon(Icons.delete_rounded),
-              label: const Text('Delete'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                foregroundColor: Theme.of(context).colorScheme.onErrorContainer,
-              ),
+            child: FutureButton(
+              onTap: () => _deleteVet(context),
+              title: 'Delete',
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _deleteVet(BuildContext context) async {
+    final shouldDelete = await _showDeleteConfirmation(context);
+    if (!shouldDelete) return;
+
+    final result = await Provider.of<VetProvider>(context, listen: false)
+        .deleteVet(vet.id);
+    if (result) {
+      Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to delete vet'),
+        ),
+      );
+    }
+  }
+
+  Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text('Delete Confirmation'),
+          content: const Text('Are you sure you want to delete this vet?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
   }
 
   Widget _buildVaccineSection(BuildContext context) {
@@ -619,53 +667,6 @@ class VetScreen extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Text('Delete Confirmation'),
-          content: const Text('Are you sure you want to delete this vet?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                final result =
-                    await Provider.of<VetProvider>(context, listen: false)
-                        .deleteVet(vet.id);
-                if (result) {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to delete vet'),
-                    ),
-                  );
-                }
-              },
-              child: Text(
-                'Delete',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _showVaccineDetails(BuildContext context, Vaccine vaccine) {
     showDialog(
       context: context,
@@ -831,17 +832,11 @@ class VetScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text("Close"),
+                  child: FutureButton(
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                    },
+                    title: "Close",
                   ),
                 ),
               ],

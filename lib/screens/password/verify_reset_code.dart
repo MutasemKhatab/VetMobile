@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/api_response_handler.dart';
+import 'package:vet/main.dart';
 
 class VerifyResetCode extends StatefulWidget {
   const VerifyResetCode({super.key});
@@ -13,18 +16,13 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
   final _resetCodeController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
 
   Future<void> _verifyResetCode() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/api/password/verify-reset-code'),
+        Uri.parse('$baseUrl/api/password/verify-reset-code'),
         headers: {'Content-Type': 'application/json'},
         body: '''
         {
@@ -35,24 +33,21 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
         ''',
       );
 
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password reset successfully.')),
-        );
+      final success = ApiResponseHandler.handleResponse(
+        response: response,
+        context: context,
+        successMessage: 'Password reset successfully.',
+      );
+
+      if (success) {
         Navigator.pushReplacementNamed(context, '/login');
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${response.body}')),
-        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to reset password: $e')),
+      ApiResponseHandler.handleException(
+        context: context,
+        exception: e,
+        prefix: 'Failed to reset password',
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -112,11 +107,9 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _verifyResetCode,
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Reset Password'),
+              FutureButton(
+                onTap: _verifyResetCode,
+                title: 'Reset Password',
               ),
             ],
           ),

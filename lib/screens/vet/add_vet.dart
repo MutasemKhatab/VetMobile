@@ -7,6 +7,7 @@ import 'package:vet/widgets/custom_input_field.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/pick_image.dart';
 import 'package:vet/services/api/image_api_helper.dart';
+import 'package:vet/widgets/future_button.dart';
 import 'dart:io';
 
 class AddVet extends StatefulWidget {
@@ -60,7 +61,7 @@ class _AddVetState extends State<AddVet> {
     return null;
   }
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       if (_selectedImage == null && widget.vet == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -174,18 +175,9 @@ class _AddVetState extends State<AddVet> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  fixedSize: Size(double.infinity, 50),
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(widget.vet == null ? 'Add Vet' : 'Update Vet'),
+              FutureButton(
+                onTap: _submitForm,
+                title: widget.vet == null ? 'Add Vet' : 'Update Vet',
               ),
             ],
           ),

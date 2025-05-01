@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vet/services/auth/change_password_service.dart';
 import 'package:vet/services/auth/service_provider.dart';
 import 'package:vet/utils/validators.dart';
+import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/api_response_handler.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -15,7 +17,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -28,27 +29,29 @@ class _ChangePasswordState extends State<ChangePassword> {
   Future<void> _changePassword() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
-
     try {
-      await ServiceProvider.changePasswordService.changePassword(
-          ChangePasswordRequest(
+      final response = await ServiceProvider.changePasswordService
+          .changePassword(ChangePasswordRequest(
               currentPassword: _currentPasswordController.text,
               newPassword: _newPasswordController.text));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password changed successfully')),
-      );
-      Navigator.pop(context);
+
+      if (response.status) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password changed successfully')),
+        );
+        Navigator.pop(context);
+      } else {
+        // Handle error from the service response
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response.message)),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to change password: $e')),
+      ApiResponseHandler.handleException(
+        context: context,
+        exception: e,
+        prefix: 'Failed to change password',
       );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -101,16 +104,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _changePassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  fixedSize: const Size(double.infinity, 50),
-                ),
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text('Change Password'),
+              FutureButton(
+                onTap: _changePassword,
+                title: 'Change Password',
               ),
             ],
           ),

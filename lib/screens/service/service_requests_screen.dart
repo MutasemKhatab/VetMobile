@@ -5,6 +5,7 @@ import 'package:vet/providers/service_request_provider.dart';
 import 'package:vet/providers/vet_owner_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:intl/intl.dart';
+import 'package:vet/widgets/future_button.dart';
 
 class ServiceRequestsScreen extends StatefulWidget {
   const ServiceRequestsScreen({super.key, required this.title});
@@ -68,19 +69,12 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
                               ),
                     ),
                     const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
+                    FutureButton(
+                      onTap: () async {
+                        await Navigator.pushNamed(
                             context, AppRoutes.createServiceRequest);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                      ),
-                      child: const Text('Create Request'),
+                      title: 'Create Request',
                     ),
                   ],
                 ),

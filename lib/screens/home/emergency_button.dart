@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({
     super.key,
   });
+
+  Future<void> _makeEmergencyCall() async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: '+96227201000');
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      debugPrint('Could not launch $phoneUri');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +25,7 @@ class EmergencyButton extends StatelessWidget {
           ),
           fixedSize: Size(1, 75),
         ),
-        onPressed: () {
-          //TODO 
-        },
+        onPressed: _makeEmergencyCall,
         child: Text(
           'Emergency Call',
           style: Theme.of(context)

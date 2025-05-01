@@ -57,12 +57,8 @@ class Profile extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   //email
-                  Text(
-                    vetOwner.email,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                  ),
+                  Text(vetOwner.email,
+                      style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: 10),
                   Text(
                     vetOwner.address ?? 'No address provided',

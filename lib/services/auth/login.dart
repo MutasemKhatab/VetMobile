@@ -1,6 +1,7 @@
 import 'package:vet/main.dart';
 import 'package:vet/services/auth/login_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:vet/utils/error_parser.dart';
 
 class Login implements LoginService {
   static final url = '$baseUrl/api/auth/login';
@@ -20,7 +21,9 @@ class Login implements LoginService {
         body: response.body,
       );
     } else {
-      return LoginResponse(message: response.body, success: false);
+      return LoginResponse(
+          message: ErrorParser.parseErrorResponse(response.body),
+          success: false);
     }
   }
 }

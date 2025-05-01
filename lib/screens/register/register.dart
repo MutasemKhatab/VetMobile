@@ -9,6 +9,7 @@ import 'package:vet/services/api/update_info_service.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/custom_input_field.dart';
 import 'package:vet/widgets/pick_image.dart';
+import 'package:vet/widgets/future_button.dart';
 import 'dart:io';
 
 class Register extends StatefulWidget {
@@ -94,8 +95,6 @@ class _RegisterState extends State<Register> {
       final res = await ServiceProvider.updateInfoService
           .updateProfile(updateProfileRequest);
 
-      debugPrint(res.message);
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(res.message)),
       );
@@ -137,7 +136,6 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.vetOwner == null ? 'Register' : 'Update Profile'),
@@ -219,17 +217,9 @@ class _RegisterState extends State<Register> {
                 },
               ),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _submitForm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  fixedSize: Size(size.width, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text(widget.vetOwner == null ? 'Register' : 'Update'),
+              FutureButton(
+                onTap: _submitForm,
+                title: widget.vetOwner == null ? 'Register' : 'Update',
               ),
             ],
           ),
