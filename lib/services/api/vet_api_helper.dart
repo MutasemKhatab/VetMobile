@@ -6,7 +6,7 @@ import 'package:vet/models/vet.dart';
 import 'package:vet/services/auth/service_provider.dart';
 
 class VetApiHelper {
-  static final url = '$baseUrl/vet';
+  static final url = '$baseUrl/api/vet';
 
   static Future<List<Vet>> fetchVets() async {
     final token = await ServiceProvider.tokenService.getToken();

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:vet/services/auth/service_provider.dart';
 
 class VetOwnerApiHelper {
-  static final url = '$baseUrl/vetowner/current';
+  static final url = '$baseUrl/api/vetowner/current';
 
   Future<VetOwner> fetchVetOwner() async {
     final token = await ServiceProvider.tokenService.getToken();

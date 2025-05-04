@@ -6,7 +6,7 @@ import 'package:vet/models/service_request.dart';
 import 'package:vet/services/auth/service_provider.dart';
 
 class ServiceRequestApiHelper {
-  static final url = '$baseUrl/serviceRequest';
+  static final url = '$baseUrl/api/serviceRequest';
 
   static Future<List<ServiceRequest>> fetchOwnerServiceRequests(
       String ownerId) async {

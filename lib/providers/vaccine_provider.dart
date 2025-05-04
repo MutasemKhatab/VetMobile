@@ -14,4 +14,9 @@ class VaccineProvider with ChangeNotifier {
     _vaccines[vetId] = vaccines;
     notifyListeners();
   }
+
+  void clearVaccines() {
+    _vaccines.clear();
+    notifyListeners();
+  }
 }

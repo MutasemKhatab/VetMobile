@@ -8,11 +8,9 @@ import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/themes.dart';
 
-const baseUrl = "https://vethospital.azurewebsites.net";
+const baseUrl = "http://localhost:8080";
 // language
-// TODO check the token time if it expired try renewing it
-// TODO notification page
-// logout
+// apk icon
 void main() {
   final providers = [
     ChangeNotifierProvider(create: (_) => VetOwnerProvider()),
@@ -35,6 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    print("Theme: ${themeProvider.themeMode}");
 
     return MaterialApp(
       title: 'Vet',

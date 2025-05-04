@@ -95,7 +95,7 @@ class MyVets extends StatelessWidget {
                             tag: 'vet-image-${vet.id}',
                             child: vet.picUrl != null && vet.picUrl!.isNotEmpty
                                 ? Image.network(
-                                    "$baseUrl/${vet.picUrl!}",
+                                    "$baseUrl/api/image/${vet.picUrl!}",
                                     fit: BoxFit.cover,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Container(

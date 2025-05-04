@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vet/main.dart';
+import 'package:vet/providers/vaccine_provider.dart';
 import 'package:vet/providers/vet_owner_provider.dart';
+import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/screens/profile/profile_list_tile.dart';
+import 'package:vet/services/auth/service_provider.dart';
 import 'package:vet/utils/theme_util.dart';
 
 class Profile extends StatelessWidget {
@@ -48,8 +51,8 @@ class Profile extends StatelessWidget {
                   ),
                   CircleAvatar(
                     radius: 100,
-                    backgroundImage:
-                        NetworkImage('$baseUrl/${vetOwner.profilePicUrl}'),
+                    backgroundImage: NetworkImage(
+                        '$baseUrl/api/image/${vetOwner.profilePicUrl}'),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -152,9 +155,20 @@ class Profile extends StatelessWidget {
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.pushReplacementNamed(
                                       context, AppRoutes.login);
+                                  ServiceProvider.sharedPreferenceService
+                                      .removeToken();
+                                  Provider.of<VetOwnerProvider>(context,
+                                          listen: false)
+                                      .clearVetOwner();
+                                  Provider.of<VetProvider>(context,
+                                          listen: false)
+                                      .clearVets();
+                                  Provider.of<VaccineProvider>(context,
+                                          listen: false)
+                                      .clearVaccines();
                                 },
                                 child: const Text('Logout'),
                               ),

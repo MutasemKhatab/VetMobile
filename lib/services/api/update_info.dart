@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:vet/utils/error_parser.dart';
 
 class UpdateInfo implements UpdateInfoService {
-  static final url = '$baseUrl/vetowner/update';
+  static final url = '$baseUrl/api/vetowner/update';
 
   @override
   Future<UpdateInfoResponse> updateProfile(UpdateProfileRequest request) async {

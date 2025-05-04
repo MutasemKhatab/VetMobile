@@ -68,7 +68,7 @@ class VetScreen extends StatelessWidget {
               tag: 'vet-image-${vet.id}',
               child: vet.picUrl != null && vet.picUrl!.isNotEmpty
                   ? Image.network(
-                      "$baseUrl/${vet.picUrl!}",
+                      "$baseUrl/api/image/${vet.picUrl!}",
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
@@ -393,9 +393,16 @@ class VetScreen extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: FutureButton(
-              onTap: () => _deleteVet(context),
-              title: 'Delete',
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                foregroundColor: Theme.of(context).colorScheme.onError,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              icon: Icon(Icons.delete_rounded,
+                  color: Theme.of(context).colorScheme.onError, size: 16),
+              onPressed: () => _deleteVet(context),
+              label: Text('Delete'),
             ),
           ),
         ],

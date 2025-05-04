@@ -16,8 +16,10 @@ class ImageApiHelper {
 
     // Validate file type
     final mimeType = lookupMimeType(file.path);
-    if (mimeType == null || !['image/jpeg', 'image/png', 'image/gif'].contains(mimeType)) {
-      throw Exception('Invalid file type. Only .jpg, .jpeg, .png, and .gif are allowed.');
+    if (mimeType == null ||
+        !['image/jpeg', 'image/png', 'image/gif'].contains(mimeType)) {
+      throw Exception(
+          'Invalid file type. Only .jpg, .jpeg, .png, and .gif are allowed.');
     }
 
     // Create multipart request
@@ -37,7 +39,8 @@ class ImageApiHelper {
       final responseBody = await response.stream.bytesToString();
       return responseBody; // Assuming the server returns the file path in the response
     } else {
-      throw Exception('Failed to upload image. Status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to upload image. Status code: ${response.statusCode}');
     }
   }
 }

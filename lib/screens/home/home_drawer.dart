@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vet/main.dart';
 import 'package:vet/models/vet_owner.dart';
+import 'package:vet/providers/vaccine_provider.dart';
+import 'package:vet/providers/vet_owner_provider.dart';
+import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
+import 'package:vet/services/auth/service_provider.dart';
 import 'package:vet/utils/theme_util.dart';
 
 class HomeDrawer extends StatelessWidget {
@@ -22,7 +27,7 @@ class HomeDrawer extends StatelessWidget {
             accountEmail: Text(user?.email ?? ''),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
-                '$baseUrl/${user?.profilePicUrl}',
+                '$baseUrl/api/image/${user?.profilePicUrl}',
               ),
             ),
           ),
@@ -45,6 +50,13 @@ class HomeDrawer extends StatelessWidget {
             title: Text('Log Out'),
             onTap: () {
               Navigator.pushReplacementNamed(context, AppRoutes.login);
+
+              ServiceProvider.sharedPreferenceService.removeToken();
+              Provider.of<VetOwnerProvider>(context, listen: false)
+                  .clearVetOwner();
+              Provider.of<VetProvider>(context, listen: false).clearVets();
+              Provider.of<VaccineProvider>(context, listen: false)
+                  .clearVaccines();
             },
           ),
         ],
