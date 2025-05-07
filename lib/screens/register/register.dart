@@ -6,6 +6,7 @@ import 'package:vet/services/auth/register_service.dart';
 import 'package:vet/services/auth/service_provider.dart';
 import 'package:vet/services/api/image_api_helper.dart';
 import 'package:vet/services/api/update_info_service.dart';
+import 'package:vet/utils/app_localizations.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/custom_input_field.dart';
 import 'package:vet/widgets/pick_image.dart';
@@ -73,7 +74,7 @@ class _RegisterState extends State<Register> {
     String? profilePicUrl;
     if (widget.vetOwner == null && _selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a profile picture')),
+        SnackBar(content: Text(context.tr('please_select_profile_picture'))),
       );
       return;
     }
@@ -138,7 +139,9 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vetOwner == null ? 'Register' : 'Update Profile'),
+        title: Text(widget.vetOwner == null
+            ? context.tr('register')
+            : context.tr('update_profile')),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         shape: const RoundedRectangleBorder(
@@ -157,20 +160,22 @@ class _RegisterState extends State<Register> {
                 children: [
                   Expanded(
                     child: CustomInputField(
-                      labelText: 'First Name',
+                      labelText: context.tr('first_name'),
                       icon: Icons.person,
                       controller: _firstNameController,
-                      validator: Validators.emptyText,
+                      validator: (value) =>
+                          Validators.emptyText(value, context),
                       keyboardType: TextInputType.name,
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: CustomInputField(
-                      labelText: 'Last Name',
+                      labelText: context.tr('last_name'),
                       icon: Icons.person,
                       controller: _lastNameController,
-                      validator: Validators.emptyText,
+                      validator: (value) =>
+                          Validators.emptyText(value, context),
                       keyboardType: TextInputType.name,
                     ),
                   ),
@@ -178,34 +183,36 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 16),
               CustomInputField(
-                labelText: 'Email',
+                labelText: context.tr('email'),
                 icon: Icons.email,
                 controller: _emailController,
-                validator: Validators.emailValidator,
+                validator: (value) => Validators.emailValidator(value, context),
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 16),
               if (widget.vetOwner == null)
                 CustomInputField(
-                  labelText: 'Password',
+                  labelText: context.tr('password'),
                   icon: Icons.lock,
                   controller: _passwordController,
-                  validator: Validators.passwordValidator,
+                  validator: (value) =>
+                      Validators.passwordValidator(value, context),
                   keyboardType: TextInputType.visiblePassword,
                 ),
               SizedBox(height: 16),
               CustomInputField(
-                labelText: 'Address',
+                labelText: context.tr('address'),
                 icon: Icons.home,
                 controller: _addressController,
                 keyboardType: TextInputType.streetAddress,
               ),
               SizedBox(height: 16),
               CustomInputField(
-                labelText: 'Phone Number',
+                labelText: context.tr('phone_number'),
                 icon: Icons.phone,
                 controller: _phoneNumberController,
-                validator: Validators.phoneNumberValidator,
+                validator: (value) =>
+                    Validators.phoneNumberValidator(value, context),
                 keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 16),
@@ -219,7 +226,9 @@ class _RegisterState extends State<Register> {
               SizedBox(height: 16),
               FutureButton(
                 onTap: _submitForm,
-                title: widget.vetOwner == null ? 'Register' : 'Update',
+                title: widget.vetOwner == null
+                    ? context.tr('register')
+                    : context.tr('update'),
               ),
             ],
           ),

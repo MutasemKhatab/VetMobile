@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:vet/widgets/future_button.dart';
 import 'package:vet/utils/api_response_handler.dart';
 import 'package:vet/main.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class VerifyResetCode extends StatefulWidget {
   const VerifyResetCode({super.key});
@@ -36,7 +37,7 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
       final success = ApiResponseHandler.handleResponse(
         response: response,
         context: context,
-        successMessage: 'Password reset successfully.',
+        successMessage: context.tr('password_reset_successfully'),
       );
 
       if (success) {
@@ -46,7 +47,7 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
       ApiResponseHandler.handleException(
         context: context,
         exception: e,
-        prefix: 'Failed to reset password',
+        prefix: context.tr('failed_to_reset_password'),
       );
     }
   }
@@ -54,7 +55,7 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify Reset Code')),
+      appBar: AppBar(title: Text(context.tr('verify_reset_code'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -63,13 +64,13 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+                decoration: InputDecoration(
+                  labelText: context.tr('email'),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return context.tr('please_enter_your_email');
                   }
                   return null;
                 },
@@ -77,13 +78,13 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _resetCodeController,
-                decoration: const InputDecoration(
-                  labelText: 'Reset Code',
+                decoration: InputDecoration(
+                  labelText: context.tr('reset_code'),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the reset code';
+                    return context.tr('please_enter_reset_code');
                   }
                   return null;
                 },
@@ -92,16 +93,16 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
               TextFormField(
                 controller: _newPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'New Password',
+                decoration: InputDecoration(
+                  labelText: context.tr('new_password'),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a new password';
+                    return context.tr('please_enter_new_password');
                   }
                   if (value.length < 8) {
-                    return 'Password must be at least 8 characters long';
+                    return context.tr('password_length_error');
                   }
                   return null;
                 },
@@ -109,7 +110,7 @@ class _VerifyResetCodeState extends State<VerifyResetCode> {
               const SizedBox(height: 20),
               FutureButton(
                 onTap: _verifyResetCode,
-                title: 'Reset Password',
+                title: context.tr('reset_password'),
               ),
             ],
           ),

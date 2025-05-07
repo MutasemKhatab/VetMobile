@@ -6,6 +6,7 @@ import 'package:vet/screens/home/emergency_button.dart';
 import 'package:vet/screens/home/home_app_bar.dart';
 import 'package:vet/screens/home/home_drawer.dart';
 import 'package:vet/screens/home/home_grid_item.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -31,30 +32,30 @@ class Home extends StatelessWidget {
           childAspectRatio: 1,
           children: [
             HomeGridItem(
-              title: 'Profile',
+              title: context.tr('profile'),
               icon: Icons.person,
               route: AppRoutes.profile,
             ),
             HomeGridItem(
-              title: 'Service: Truck',
+              title: context.tr('service_truck'),
               icon: Icons.local_shipping,
               route: AppRoutes.serviceRequests,
               routeArgument: 'Truck',
             ),
             HomeGridItem(
-              title: 'Service: Field Hospital',
+              title: context.tr('service_field_hospital'),
               icon: Icons.local_hospital,
               route: AppRoutes.serviceRequests,
               routeArgument: 'Field Hospital',
             ),
             HomeGridItem(
-              title: 'Service: Quarantine Zone',
+              title: context.tr('service_quarantine_zone'),
               icon: Icons.coronavirus,
               route: AppRoutes.serviceRequests,
               routeArgument: 'Quarantine Zone',
             ),
             HomeGridItem(
-              title: 'Service: Surgery',
+              title: context.tr('service_surgery'),
               icon: Icons.medical_services,
               route: AppRoutes.serviceRequests,
               routeArgument: 'Surgery',

@@ -4,6 +4,7 @@ import 'package:vet/main.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/future_button.dart';
 import 'package:vet/utils/api_response_handler.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -31,7 +32,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       final success = ApiResponseHandler.handleResponse(
         response: response,
         context: context,
-        successMessage: 'Reset code sent to your email.',
+        successMessage: context.tr('reset_code_sent'),
       );
 
       if (success) {
@@ -41,7 +42,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       ApiResponseHandler.handleException(
         context: context,
         exception: e,
-        prefix: 'Failed to send reset code',
+        prefix: context.tr('failed_send_reset_code'),
       );
     }
   }
@@ -49,7 +50,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Forgot Password')),
+      appBar: AppBar(title: Text(context.tr('forgot_password'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -58,16 +59,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             children: [
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
+                decoration: InputDecoration(
+                  labelText: context.tr('email'),
                   border: OutlineInputBorder(),
                 ),
-                validator: Validators.emailValidator,
+                validator: (email) => Validators.emailValidator(email, context),
               ),
               const SizedBox(height: 20),
               FutureButton(
                 onTap: _sendResetCode,
-                title: 'Send Reset Code',
+                title: context.tr('send_reset_code'),
               ),
             ],
           ),

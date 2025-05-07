@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vet/providers/service_request_provider.dart';
 import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class ServiceRequestDetailsScreen extends StatelessWidget {
   final ServiceRequest serviceRequest;
@@ -120,20 +121,20 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Request Details',
+                      context.tr('request_details'),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
                     _buildDetailRow(
                       context,
-                      'Description',
+                      context.tr('description'),
                       serviceRequest.description,
                       Icons.description,
                     ),
                     const Divider(height: 24),
                     _buildDetailRow(
                       context,
-                      'Request Date',
+                      context.tr('request_date'),
                       DateFormat('MMMM d, yyyy')
                           .format(serviceRequest.requestDate),
                       Icons.calendar_today,
@@ -143,7 +144,7 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
                       const Divider(height: 24),
                       _buildDetailRow(
                         context,
-                        'Completion Date',
+                        context.tr('completion_date'),
                         DateFormat('MMMM d, yyyy')
                             .format(serviceRequest.completionDate!),
                         Icons.check_circle,
@@ -161,7 +162,7 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
                 width: double.infinity,
                 child: FutureButton(
                   onTap: () => _cancelServiceRequest(context),
-                  title: 'Cancel Request',
+                  title: context.tr('cancel_request'),
                 ),
               ),
           ])),
@@ -173,15 +174,15 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Cancel Service Request'),
-        content:
-            const Text('Are you sure you want to cancel this service request?'),
+        title: Text(context.tr('cancel_service_request')),
+        content: Text(
+            context.tr('are_you_sure_you_want_to_cancel_this_service_request')),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop(false);
             },
-            child: const Text('No'),
+            child: Text(context.tr('cancel')),
           ),
           TextButton(
             onPressed: () {
@@ -190,7 +191,7 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
             ),
-            child: const Text('Yes'),
+            child: Text(context.tr('yes')),
           ),
         ],
       ),
@@ -214,14 +215,16 @@ class ServiceRequestDetailsScreen extends StatelessWidget {
 
       if (success) {
         scaffoldMessenger.showSnackBar(
-          const SnackBar(
-              content: Text('Service request cancelled successfully')),
+          SnackBar(
+              content:
+                  Text(context.tr('service_request_cancelled_successfully'))),
         );
         // Go back to the previous screen
         navigator.pop();
       } else {
         scaffoldMessenger.showSnackBar(
-          const SnackBar(content: Text('Failed to cancel service request')),
+          SnackBar(
+              content: Text(context.tr('failed_to_cancel_service_request'))),
         );
       }
     } catch (e) {

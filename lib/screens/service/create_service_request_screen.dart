@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vet/models/service_request.dart';
 import 'package:vet/providers/service_request_provider.dart';
 import 'package:vet/providers/vet_owner_provider.dart';
+import 'package:vet/utils/app_localizations.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/custom_input_field.dart';
 import 'package:vet/widgets/future_button.dart';
@@ -43,8 +44,9 @@ class _CreateServiceRequestScreenState
 
     if (vetOwner == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('You must be logged in to create a service request')),
+        SnackBar(
+            content: Text(context
+                .tr('you_must_be_logged_in_to_create_a_service_request'))),
       );
       return;
     }
@@ -64,7 +66,8 @@ class _CreateServiceRequestScreenState
 
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Service request created successfully')),
+        SnackBar(
+            content: Text(context.tr('service_request_created_successfully'))),
       );
       Navigator.pop(context);
     } else {
@@ -73,7 +76,7 @@ class _CreateServiceRequestScreenState
           content: Text(
               Provider.of<ServiceRequestProvider>(context, listen: false)
                       .error ??
-                  'Failed to create service request'),
+                  context.tr('failed_to_create_service_request')),
         ),
       );
     }
@@ -83,7 +86,7 @@ class _CreateServiceRequestScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Service Request'),
+        title: Text(context.tr('create_service_request')),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -101,7 +104,7 @@ class _CreateServiceRequestScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Select Service Type',
+                context.tr('select_service_type'),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 16),
@@ -144,7 +147,7 @@ class _CreateServiceRequestScreenState
                       });
                     },
                     child: Hero(
-                      tag: 'service-type-${serviceType}',
+                      tag: 'service-type-$serviceType',
                       flightShuttleBuilder: (
                         BuildContext flightContext,
                         Animation<double> animation,
@@ -176,7 +179,7 @@ class _CreateServiceRequestScreenState
                                 children: [
                                   Icon(iconData, size: 48),
                                   const SizedBox(height: 8),
-                                  Text(serviceType),
+                                  Text(context.tr(serviceType.toLowerCase())),
                                 ],
                               ),
                             ),
@@ -221,7 +224,7 @@ class _CreateServiceRequestScreenState
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              serviceType,
+                              context.tr(serviceType.toLowerCase()),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
@@ -246,14 +249,15 @@ class _CreateServiceRequestScreenState
               ),
               const SizedBox(height: 24),
               Text(
-                  'Please add any additional details about your request like reason, location, contact info, etc.',
+                  context.tr(
+                      'please_add_any_additional_details_about_your_request_like_reason_location_contact_info_etc'),
                   style: Theme.of(context).textTheme.bodyLarge),
               const SizedBox(height: 8),
               CustomInputField(
-                labelText: 'Description',
+                labelText: context.tr('description'),
                 icon: Icons.description,
                 controller: _descriptionController,
-                validator: Validators.emptyText,
+                validator: (value) => Validators.emptyText(value, context),
                 maxLines: 5,
               ),
               const SizedBox(height: 32),
@@ -262,7 +266,7 @@ class _CreateServiceRequestScreenState
                 height: 50,
                 child: FutureButton(
                   onTap: _submitForm,
-                  title: 'Submit Request',
+                  title: context.tr('submit_request'),
                 ),
               ),
             ],

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vet/main.dart';
 import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class MyVets extends StatelessWidget {
   const MyVets({super.key});
@@ -12,7 +13,7 @@ class MyVets extends StatelessWidget {
     final vets = Provider.of<VetProvider>(context).vets;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Vets'),
+        title: Text(context.tr('my_vets')),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -48,7 +49,7 @@ class MyVets extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'No vets added yet',
+                    context.tr('no_vets_added'),
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
@@ -57,7 +58,7 @@ class MyVets extends StatelessWidget {
                       Navigator.pushNamed(context, AppRoutes.addVet);
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text('Add Your First Vet'),
+                    label: Text(context.tr('add_first_vet')),
                   )
                 ],
               ),

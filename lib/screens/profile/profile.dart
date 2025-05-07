@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vet/main.dart';
+import 'package:vet/providers/language_provider.dart';
 import 'package:vet/providers/vaccine_provider.dart';
 import 'package:vet/providers/vet_owner_provider.dart';
 import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/screens/profile/profile_list_tile.dart';
 import 'package:vet/services/auth/service_provider.dart';
+import 'package:vet/utils/app_localizations.dart';
 import 'package:vet/utils/theme_util.dart';
 
 class Profile extends StatelessWidget {
@@ -18,7 +20,7 @@ class Profile extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(context.tr('profile')),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -39,7 +41,7 @@ class Profile extends StatelessWidget {
       ),
       body: vetOwner == null
           ? Center(
-              child: Text('No data'),
+              child: Text(context.tr('no_data')),
             )
           : SingleChildScrollView(
               child: Column(
@@ -64,70 +66,37 @@ class Profile extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: 10),
                   Text(
-                    vetOwner.address ?? 'No address provided',
+                    vetOwner.address ?? context.tr('no_address_provided'),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    vetOwner.phoneNumber ?? 'No phone number provided',
+                    vetOwner.phoneNumber ??
+                        context.tr('no_phone_number_provided'),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   ProfileListTile(
                     icon: Icons.pets,
-                    title: 'Manage Vets',
+                    title: context.tr('my_vets'),
                     onTap: () {
                       Navigator.pushNamed(context, '/vets');
                     },
                   ),
                   ProfileListTile(
                     icon: Icons.brightness_6_rounded,
-                    title: 'Theme',
+                    title: context.tr('theme'),
                     onTap: () => showThemeDialoge(context),
                   ),
                   ProfileListTile(
-                    //TODO change the language
                     icon: Icons.language,
-                    title: 'Language',
+                    title: context.tr('language'),
                     onTap: () {
-                      //show dialog to select language
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Select Language'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                RadioListTile(
-                                  title: const Text('English'),
-                                  value: 'en',
-                                  groupValue:
-                                      'en', // Replace with the current selected language
-                                  onChanged: (value) {
-                                    //change language to English
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RadioListTile(
-                                  title: const Text('Arabic'),
-                                  value: 'ar',
-                                  groupValue:
-                                      'en', // Replace with the current selected language
-                                  onChanged: (value) {
-                                    //change language to Arabic
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                      showLanguageDialog(context);
                     },
                   ),
                   ProfileListTile(
                     icon: Icons.lock,
-                    title: 'Change Password',
+                    title: context.tr('change_password'),
                     onTap: () {
                       Navigator.pushNamed(
                         context,
@@ -138,21 +107,20 @@ class Profile extends StatelessWidget {
                   //logout
                   ProfileListTile(
                     icon: Icons.logout,
-                    title: 'Logout',
+                    title: context.tr('logout'),
                     onTap: () {
                       showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text('Logout'),
-                            content:
-                                const Text('Are you sure you want to logout?'),
+                            title: Text(context.tr('logout')),
+                            content: Text(context.tr('logout_confirmation')),
                             actions: [
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Text('Cancel'),
+                                child: Text(context.tr('cancel')),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -170,7 +138,7 @@ class Profile extends StatelessWidget {
                                           listen: false)
                                       .clearVaccines();
                                 },
-                                child: const Text('Logout'),
+                                child: Text(context.tr('logout')),
                               ),
                             ],
                           );
@@ -181,6 +149,42 @@ class Profile extends StatelessWidget {
                 ],
               ),
             ),
+    );
+  }
+
+  void showLanguageDialog(BuildContext context) {
+    final languageProvider =
+        Provider.of<LanguageProvider>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(context.tr('select_language')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile(
+                title: Text(context.tr('english')),
+                value: 'en',
+                groupValue: languageProvider.currentLanguage,
+                onChanged: (value) {
+                  languageProvider.setLanguage(value!);
+                  Navigator.pop(context);
+                },
+              ),
+              RadioListTile(
+                title: Text(context.tr('arabic')),
+                value: 'ar',
+                groupValue: languageProvider.currentLanguage,
+                onChanged: (value) {
+                  languageProvider.setLanguage(value!);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

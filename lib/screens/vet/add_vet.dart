@@ -8,6 +8,7 @@ import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/pick_image.dart';
 import 'package:vet/services/api/image_api_helper.dart';
 import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/app_localizations.dart';
 import 'dart:io';
 
 class AddVet extends StatefulWidget {
@@ -65,7 +66,7 @@ class _AddVetState extends State<AddVet> {
     if (_formKey.currentState!.validate()) {
       if (_selectedImage == null && widget.vet == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select an image')),
+          SnackBar(content: Text(context.tr('please_select_profile_picture'))),
         );
         return;
       }
@@ -73,7 +74,7 @@ class _AddVetState extends State<AddVet> {
       imageUrl = await _uploadImage();
       if (widget.vet == null && imageUrl == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select an image')),
+          SnackBar(content: Text(context.tr('please_select_profile_picture'))),
         );
         return;
       }
@@ -84,7 +85,7 @@ class _AddVetState extends State<AddVet> {
         gender: _genderController.text,
         species: _speciesController.text,
         dateOfBirth: DateTime.tryParse(_dateOfBirthController.text),
-        picUrl: imageUrl,
+        picUrl: imageUrl ?? widget.vet?.picUrl,
         ownerId: widget.vet?.ownerId,
       );
 
@@ -103,7 +104,9 @@ class _AddVetState extends State<AddVet> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.vet == null ? 'Add Vet' : 'Update Vet'),
+        title: Text(widget.vet == null
+            ? context.tr('add_vet')
+            : context.tr('update_vet')),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -121,24 +124,24 @@ class _AddVetState extends State<AddVet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomInputField(
-                labelText: 'Name',
+                labelText: context.tr('name'),
                 icon: Icons.person,
                 controller: _nameController,
-                validator: Validators.emptyText,
+                validator: (value) => Validators.emptyText(value, context),
               ),
               const SizedBox(height: 10),
               CustomInputField(
-                labelText: 'Gender',
+                labelText: context.tr('gender'),
                 icon: Icons.person_outline,
                 controller: _genderController,
-                validator: Validators.emptyText,
+                validator: (value) => Validators.emptyText(value, context),
               ),
               const SizedBox(height: 10),
               CustomInputField(
-                labelText: 'Species',
+                labelText: context.tr('species'),
                 icon: Icons.pets,
                 controller: _speciesController,
-                validator: Validators.emptyText,
+                validator: (value) => Validators.emptyText(value, context),
               ),
               const SizedBox(height: 10),
               GestureDetector(
@@ -158,10 +161,10 @@ class _AddVetState extends State<AddVet> {
                 },
                 child: AbsorbPointer(
                   child: CustomInputField(
-                    labelText: 'Date of Birth',
+                    labelText: context.tr('date_of_birth'),
                     icon: Icons.calendar_today,
                     controller: _dateOfBirthController,
-                    validator: Validators.validateDate,
+                    validator: (value) => Validators.emptyText(value, context),
                     keyboardType: TextInputType.datetime,
                   ),
                 ),
@@ -177,7 +180,9 @@ class _AddVetState extends State<AddVet> {
               const SizedBox(height: 20),
               FutureButton(
                 onTap: _submitForm,
-                title: widget.vet == null ? 'Add Vet' : 'Update Vet',
+                title: widget.vet == null
+                    ? context.tr('add_vet')
+                    : context.tr('update_vet'),
               ),
             ],
           ),

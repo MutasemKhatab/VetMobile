@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -6,7 +7,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Home'),
+      title: Text(context.tr('home')),
       centerTitle: true,
       backgroundColor: Theme.of(context).colorScheme.primary,
       foregroundColor: Theme.of(context).colorScheme.onPrimary,

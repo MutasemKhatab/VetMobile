@@ -6,6 +6,7 @@ import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/services/auth/login_service.dart';
 import 'package:vet/services/auth/service_provider.dart';
+import 'package:vet/utils/app_localizations.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/custom_input_field.dart';
 import 'package:vet/widgets/future_button.dart';
@@ -82,27 +83,27 @@ class _LoginBoxState extends State<LoginBox> {
         child: Column(
           children: [
             Text(
-              'Login',
+              context.tr('login'),
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             SizedBox(height: 20),
             CustomInputField(
-              labelText: 'Email',
+              labelText: context.tr('email'),
               icon: Icons.email,
               keyboardType: TextInputType.emailAddress,
               controller: _emailController,
-              validator: Validators.emailValidator,
+              validator: (value) => Validators.emailValidator(value, context),
             ),
             SizedBox(height: 20),
             CustomInputField(
-              labelText: 'Password',
+              labelText: context.tr('password'),
               icon: Icons.lock,
               keyboardType: TextInputType.visiblePassword,
               controller: _passwordController,
-              validator: Validators.passwordValidator,
+              validator: (value) => Validators.passwordValidator(value, context),
             ),
             SizedBox(height: 20),
-            FutureButton(onTap: _submitForm, title: 'Login'),
+            FutureButton(onTap: _submitForm, title: context.tr('login')),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +112,7 @@ class _LoginBoxState extends State<LoginBox> {
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.forgotPassword);
                   },
-                  child: const Text('Forgot Password?'),
+                  child: Text(context.tr('forgot_password')),
                 ),
               ],
             ),
@@ -119,12 +120,12 @@ class _LoginBoxState extends State<LoginBox> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Don\'t have an account?'),
+                Text(context.tr('dont_have_account')),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.register);
                   },
-                  child: Text('Sign up'),
+                  child: Text(context.tr('sign_up')),
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:vet/services/auth/service_provider.dart';
 import 'package:vet/utils/validators.dart';
 import 'package:vet/widgets/future_button.dart';
 import 'package:vet/utils/api_response_handler.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -37,7 +38,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
       if (response.status) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password changed successfully')),
+          SnackBar(content: Text(context.tr('password_changed_successfully'))),
         );
         Navigator.pop(context);
       } else {
@@ -50,7 +51,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       ApiResponseHandler.handleException(
         context: context,
         exception: e,
-        prefix: 'Failed to change password',
+        prefix: context.tr('failed_to_change_password'),
       );
     }
   }
@@ -59,7 +60,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Password'),
+        title: Text(context.tr('change_password')),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
@@ -72,33 +73,35 @@ class _ChangePasswordState extends State<ChangePassword> {
               TextFormField(
                 controller: _currentPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Current Password',
+                decoration: InputDecoration(
+                  labelText: context.tr('current_password'),
                   border: OutlineInputBorder(),
                 ),
-                validator: Validators.passwordValidator,
+                validator: (value) =>
+                    Validators.passwordValidator(value, context),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _newPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'New Password',
+                decoration: InputDecoration(
+                  labelText: context.tr('new_password'),
                   border: OutlineInputBorder(),
                 ),
-                validator: Validators.passwordValidator,
+                validator: (value) =>
+                    Validators.passwordValidator(value, context),
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Confirm New Password',
+                decoration: InputDecoration(
+                  labelText: context.tr('confirm_new_password'),
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value != _newPasswordController.text) {
-                    return 'Passwords do not match';
+                    return context.tr('passwords_do_not_match');
                   }
                   return null;
                 },
@@ -106,7 +109,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               const SizedBox(height: 20),
               FutureButton(
                 onTap: _changePassword,
-                title: 'Change Password',
+                title: context.tr('change_password'),
               ),
             ],
           ),

@@ -9,6 +9,7 @@ import 'package:vet/providers/vet_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:vet/services/permissions_service.dart';
 import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class VetScreen extends StatelessWidget {
   final Vet vet;
@@ -249,7 +250,7 @@ class VetScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'About',
+                    context.tr('about'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -262,7 +263,7 @@ class VetScreen extends StatelessWidget {
                       _buildInfoItem(
                         context,
                         Icons.pets_rounded,
-                        'Species',
+                        context.tr('species'),
                         vet.species,
                       ),
                       _buildInfoItem(
@@ -270,7 +271,7 @@ class VetScreen extends StatelessWidget {
                         vet.gender.toLowerCase() == 'male'
                             ? Icons.male_rounded
                             : Icons.female_rounded,
-                        'Gender',
+                        context.tr('gender'),
                         vet.gender,
                         vet.gender.toLowerCase() == 'male'
                             ? Colors.blueAccent
@@ -284,17 +285,17 @@ class VetScreen extends StatelessWidget {
                       _buildInfoItem(
                         context,
                         Icons.cake_rounded,
-                        'Birthday',
+                        context.tr('birthday'),
                         vet.dateOfBirth != null
                             ? vet.dateOfBirth!.toLocal().toShortDateString()
-                            : 'Not specified',
+                            : context.tr('not_specified'),
                       ),
                       if (vet.dateOfBirth != null)
                         _buildInfoItem(
                           context,
                           Icons.timeline_rounded,
-                          'Age',
-                          _calculateAge(vet.dateOfBirth!),
+                          context.tr('age'),
+                          _calculateAge(vet.dateOfBirth!, context),
                         ),
                     ],
                   ),
@@ -380,7 +381,7 @@ class VetScreen extends StatelessWidget {
               icon: Icon(Icons.edit_rounded,
                   color: Theme.of(context).colorScheme.primary, size: 16),
               label: Text(
-                'Edit',
+                context.tr('edit'),
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
               style: ElevatedButton.styleFrom(
@@ -402,7 +403,7 @@ class VetScreen extends StatelessWidget {
               icon: Icon(Icons.delete_rounded,
                   color: Theme.of(context).colorScheme.onError, size: 16),
               onPressed: () => _deleteVet(context),
-              label: Text('Delete'),
+              label: Text(context.tr('delete')),
             ),
           ),
         ],
@@ -420,8 +421,8 @@ class VetScreen extends StatelessWidget {
       Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to delete vet'),
+        SnackBar(
+          content: Text(context.tr('failed_to_delete_vet')),
         ),
       );
     }
@@ -435,21 +436,21 @@ class VetScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text('Delete Confirmation'),
-          content: const Text('Are you sure you want to delete this vet?'),
+          title: Text(context.tr('delete_confirmation')),
+          content: Text(context.tr('are_you_sure_you_want_to_delete_this_vet')),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('Cancel'),
+              child: Text(context.tr('cancel')),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
               child: Text(
-                'Delete',
+                context.tr('delete'),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
@@ -499,7 +500,7 @@ class VetScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Vaccination Records',
+                    context.tr('vaccination_records'),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -528,7 +529,7 @@ class VetScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'No vaccines recorded',
+                            context.tr('no_vaccines_recorded'),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
@@ -635,7 +636,7 @@ class VetScreen extends StatelessWidget {
                                               BorderRadius.circular(16),
                                         ),
                                         child: Text(
-                                          '${vaccine.doses.length} ${vaccine.doses.length == 1 ? 'dose' : 'doses'}',
+                                          '${vaccine.doses.length} ${vaccine.doses.length == 1 ? context.tr('dose') : context.tr('doses')}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall
@@ -728,7 +729,7 @@ class VetScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Description',
+                        context.tr('description'),
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -744,7 +745,7 @@ class VetScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  "Vaccination Schedule",
+                  context.tr('vaccination_schedule'),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -802,7 +803,7 @@ class VetScreen extends StatelessWidget {
                           title: Row(
                             children: [
                               Text(
-                                "Dose ${doseIndex + 1}",
+                                "${context.tr('dose')} ${doseIndex + 1}",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -843,7 +844,7 @@ class VetScreen extends StatelessWidget {
                     onTap: () async {
                       Navigator.of(context).pop();
                     },
-                    title: "Close",
+                    title: context.tr('close'),
                   ),
                 ),
               ],
@@ -862,8 +863,8 @@ class VetScreen extends StatelessWidget {
 
     if (!hasPermission) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Calendar permission is required to add events'),
+        SnackBar(
+          content: Text(context.tr('calendar_permission_required')),
         ),
       );
       return;
@@ -872,9 +873,9 @@ class VetScreen extends StatelessWidget {
     // Add to calendar
     final Event event = Event(
       allDay: true,
-      title: 'Vaccine: ${vaccine.name}',
+      title: '${context.tr('vaccine')}: ${vaccine.name}',
       description:
-          'Reminder for ${vaccine.name} dose number ${doseIndex + 1} for ${vet.name}',
+          '${context.tr('reminder_for')} ${vaccine.name} ${context.tr('dose')} ${context.tr('number')} ${doseIndex + 1} ${context.tr('for')} ${vet.name}',
       startDate: vaccine.doses[doseIndex],
       endDate: vaccine.doses[doseIndex].add(const Duration(hours: 1)),
     );
@@ -883,14 +884,14 @@ class VetScreen extends StatelessWidget {
       if (result) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Added ${vaccine.name} to calendar'),
+            content: Text('${context.tr('added_to_calendar')} ${vaccine.name}'),
           ),
         );
       }
     });
   }
 
-  String _calculateAge(DateTime dateOfBirth) {
+  String _calculateAge(DateTime dateOfBirth, BuildContext context) {
     final now = DateTime.now();
     int years = now.year - dateOfBirth.year;
     int months = now.month - dateOfBirth.month;
@@ -905,12 +906,18 @@ class VetScreen extends StatelessWidget {
     }
 
     if (years > 0) {
-      return years == 1 ? '1 year' : '$years years';
+      return years == 1
+          ? '1 ${context.tr('year')}'
+          : '$years ${context.tr('years')}';
     } else if (months > 0) {
-      return months == 1 ? '1 month' : '$months months';
+      return months == 1
+          ? '1 ${context.tr('month')}'
+          : '$months ${context.tr('months')}';
     } else {
       final days = now.difference(dateOfBirth).inDays;
-      return days == 1 ? '1 day' : '$days days';
+      return days == 1
+          ? '1 ${context.tr('day')}'
+          : '$days ${context.tr('days')}';
     }
   }
 }

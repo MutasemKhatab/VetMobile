@@ -26,7 +26,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      obscureText: widget.labelText == 'Password',
+      obscureText: widget.keyboardType == TextInputType.visiblePassword,
       validator: widget.validator,
       keyboardType: widget.keyboardType,
       maxLines: widget.maxLines,

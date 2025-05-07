@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Base themes that will be customized based on language
 final lightTheme = ThemeData(
   brightness: Brightness.light,
   colorScheme: ColorScheme.fromSeed(
@@ -105,3 +106,32 @@ final darkTheme = ThemeData(
         color: Color(0xFFE0E0E0), fontSize: 20, fontWeight: FontWeight.bold),
   ),
 );
+
+/// Get theme with the appropriate font family based on language
+ThemeData getThemeWithFont(ThemeData baseTheme, bool isArabic) {
+  if (!isArabic) return baseTheme;
+
+  // Apply Cairo font to all text styles
+  return baseTheme.copyWith(
+    textTheme: baseTheme.textTheme.apply(
+      fontFamily: 'Cairo',
+    ),
+    primaryTextTheme: baseTheme.primaryTextTheme.apply(
+      fontFamily: 'Cairo',
+    ),
+    appBarTheme: baseTheme.appBarTheme.copyWith(
+      titleTextStyle: baseTheme.appBarTheme.titleTextStyle?.copyWith(
+            fontFamily: 'Cairo',
+          ) ??
+          TextStyle(fontFamily: 'Cairo'),
+    ),
+    dialogTheme: baseTheme.dialogTheme.copyWith(
+      titleTextStyle: baseTheme.dialogTheme.titleTextStyle?.copyWith(
+        fontFamily: 'Cairo',
+      ),
+      contentTextStyle: baseTheme.dialogTheme.contentTextStyle?.copyWith(
+        fontFamily: 'Cairo',
+      ),
+    ),
+  );
+}

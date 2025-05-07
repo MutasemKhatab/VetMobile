@@ -6,6 +6,7 @@ import 'package:vet/providers/vet_owner_provider.dart';
 import 'package:vet/routes.dart';
 import 'package:intl/intl.dart';
 import 'package:vet/widgets/future_button.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class ServiceRequestsScreen extends StatefulWidget {
   const ServiceRequestsScreen({super.key, required this.title});
@@ -34,7 +35,7 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Service Requests'),
+        title: Text(context.tr('service_requests')),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -62,7 +63,7 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
                         size: 64, color: Colors.grey),
                     const SizedBox(height: 16),
                     Text(
-                      'No service requests found',
+                      context.tr('no_service_requests_found'),
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 color: Colors.grey,
@@ -74,7 +75,7 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
                         await Navigator.pushNamed(
                             context, AppRoutes.createServiceRequest);
                       },
-                      title: 'Create Request',
+                      title: context.tr('create_request'),
                     ),
                   ],
                 ),
@@ -137,7 +138,7 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
-                                      request.title,
+                                      context.tr(request.title.toLowerCase()),
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleLarge,
@@ -186,7 +187,7 @@ class _ServiceRequestsScreenState extends State<ServiceRequestsScreen> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                'Requested on: ${DateFormat('MMM d, yyyy').format(request.requestDate)}',
+                                '${context.tr('request_date')}: ${DateFormat('MMM d, yyyy').format(request.requestDate)}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall

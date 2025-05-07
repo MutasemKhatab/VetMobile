@@ -1,28 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vet/providers/theme_provider.dart';
+import 'package:vet/utils/app_localizations.dart';
 
-void showThemeDialoge(context) {
+void showThemeDialoge(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
       final themeMode = Provider.of<ThemeProvider>(context).themeMode;
       return AlertDialog(
-        title: const Text('Select Theme'),
+        title: Text(context.tr('select_theme')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: ThemeMode.values
-              .map((e) => RadioListTile(
-                    title: Text(e.toString().split('.').last),
-                    value: e,
-                    groupValue: themeMode,
-                    onChanged: (value) {
-                      Provider.of<ThemeProvider>(context, listen: false)
-                          .setThemeMode(value!);
-                      Navigator.pop(context);
-                    },
-                  ))
-              .toList(),
+          children: [
+            RadioListTile(
+              title: Text(context.tr('system')),
+              value: ThemeMode.system,
+              groupValue: themeMode,
+              onChanged: (value) {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile(
+              title: Text(context.tr('light')),
+              value: ThemeMode.light,
+              groupValue: themeMode,
+              onChanged: (value) {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile(
+              title: Text(context.tr('dark')),
+              value: ThemeMode.dark,
+              groupValue: themeMode,
+              onChanged: (value) {
+                Provider.of<ThemeProvider>(context, listen: false)
+                    .setThemeMode(value!);
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       );
     },

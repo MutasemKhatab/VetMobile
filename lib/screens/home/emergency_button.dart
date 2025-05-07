@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vet/utils/app_localizations.dart';
 
 class EmergencyButton extends StatelessWidget {
   const EmergencyButton({
@@ -27,7 +28,7 @@ class EmergencyButton extends StatelessWidget {
         ),
         onPressed: _makeEmergencyCall,
         child: Text(
-          'Emergency Call',
+          context.tr('call_emergency'),
           style: Theme.of(context)
               .textTheme
               .headlineMedium
